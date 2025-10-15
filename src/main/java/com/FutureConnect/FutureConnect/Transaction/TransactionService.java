@@ -1,6 +1,8 @@
 package com.FutureConnect.FutureConnect.Transaction;
 
 import com.FutureConnect.FutureConnect.Auth.UserRepository;
+import com.FutureConnect.FutureConnect.Expense.ExpenseRepository;
+import com.FutureConnect.FutureConnect.Model.Expense;
 import com.FutureConnect.FutureConnect.Model.Transaction;
 import com.FutureConnect.FutureConnect.Model.User;
 import com.FutureConnect.FutureConnect.Transaction.DTO.RangeOfTransaction;
@@ -18,13 +20,14 @@ public class TransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
-
+    @Autowired
+    private ExpenseRepository expenseRepository;
     @Autowired
     private UserRepository userRepository;
 
     public Transaction createTransaction(TransactionRequest request) {
         // Validate amount
-        if (request.getAmount() <= 0) {
+        if (request.getAmount() == 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }
         System.out.println(request.getDate());
@@ -44,6 +47,10 @@ public class TransactionService {
 
         transaction.setAmount(request.getAmount());
 
+        Transaction finalTransaction = transactionRepository.save(transaction);
+        Expense expense=expenseRepository.findByUserId(user.getId()).orElseThrow();
+        expense.setCurrentBalance(expense.getCurrentBalance()+finalTransaction.getAmount());
+        expenseRepository.save(expense);
         return transactionRepository.save(transaction);
     }
 
