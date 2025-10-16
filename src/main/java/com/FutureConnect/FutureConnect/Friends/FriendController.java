@@ -1,4 +1,3 @@
 package com.FutureConnect.FutureConnect.Friends;
 
-public class FriendController {
-}
+public class FriendController {}

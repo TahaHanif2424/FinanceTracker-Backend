@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class MonthlyIncomeDTO {
-    private String userId;
-    private int monthlyIncome;
+  private String userId;
+  private int monthlyIncome;
 }

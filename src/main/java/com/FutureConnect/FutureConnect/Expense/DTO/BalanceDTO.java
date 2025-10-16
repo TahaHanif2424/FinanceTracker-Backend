@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class BalanceDTO {
-    private String userId;
-    private int balance;
+  private String userId;
+  private int balance;
 }

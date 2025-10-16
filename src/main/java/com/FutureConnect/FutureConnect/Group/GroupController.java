@@ -12,19 +12,18 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class GroupController {
 
-    @Autowired
-    private GroupService groupService;
+  @Autowired private GroupService groupService;
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createGroup(@RequestBody GroupRequest request) {
-        try {
-            Groups createdGroup = groupService.createGroup(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdGroup);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while creating the group: " + e.getMessage());
-        }
+  @PostMapping("/create")
+  public ResponseEntity<?> createGroup(@RequestBody GroupRequest request) {
+    try {
+      Groups createdGroup = groupService.createGroup(request);
+      return ResponseEntity.status(HttpStatus.CREATED).body(createdGroup);
+    } catch (RuntimeException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("An error occurred while creating the group: " + e.getMessage());
     }
+  }
 }

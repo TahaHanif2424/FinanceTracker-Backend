@@ -10,13 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 public class Expense {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-    private int currentBalance = 0;
-    private int monthlyExpense = 0;
+  @OneToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
+
+  private int currentBalance = 0;
+  private int monthlyExpense = 0;
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class RangeOfTransaction {
-    private String userId;
-    private String fromDate;
-    private String toDate;
+  private String userId;
+  private String fromDate;
+  private String toDate;
 }

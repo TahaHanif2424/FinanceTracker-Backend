@@ -11,18 +11,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExpenseSplit {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "group_expense_id", nullable = false)
-    private GroupExpense groupExpense;
+  @ManyToOne
+  @JoinColumn(name = "group_expense_id", nullable = false)
+  private GroupExpense groupExpense;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
-    private int amount;
-    private boolean isPaid;
+  private int amount;
+  private boolean isPaid;
 }

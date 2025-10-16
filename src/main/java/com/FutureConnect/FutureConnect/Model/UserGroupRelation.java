@@ -12,22 +12,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserGroupRelation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    // Each relation belongs to ONE user
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+  // Each relation belongs to ONE user
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
-    // Each relation belongs to ONE group
-    @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
-    private Groups group;
+  // Each relation belongs to ONE group
+  @ManyToOne
+  @JoinColumn(name = "group_id", nullable = false)
+  private Groups group;
 
-    // Extra field in the relationship
-    private int debt=0;
+  // Extra field in the relationship
+  private int debt = 0;
 
-    private int receivable=0;
+  private int receivable = 0;
 }
