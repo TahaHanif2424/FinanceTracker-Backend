@@ -27,7 +27,7 @@ public class UserGroupRelation {
     private Groups group;
 
     // Extra field in the relationship
-    private int debt;
+    private int debt=0;
 
-    private int receivable;
+    private int receivable=0;
 }

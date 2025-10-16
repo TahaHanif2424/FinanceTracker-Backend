@@ -30,6 +30,7 @@ public class Groups {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    private String description;
     @OneToMany(mappedBy = "group")
     private List<UserGroupRelation> userRelations;
 }
