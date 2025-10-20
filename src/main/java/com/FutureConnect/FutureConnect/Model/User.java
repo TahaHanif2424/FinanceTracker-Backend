@@ -1,5 +1,6 @@
 package com.FutureConnect.FutureConnect.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,8 @@ public class User {
 
   private String name;
   private String email;
+
+  @JsonIgnore
   private String password;
 
   @Column(columnDefinition = "integer default 0")
