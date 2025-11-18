@@ -1,5 +1,6 @@
 package com.FutureConnect.FutureConnect.Auth;
 
+import com.FutureConnect.FutureConnect.Auth.DTO.LoginRequest;
 import com.FutureConnect.FutureConnect.Auth.DTO.SignupRequest;
 import com.FutureConnect.FutureConnect.Model.User;
 import java.util.List;
@@ -30,7 +31,10 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public User login(@RequestBody User user) {
+  public User login(@RequestBody LoginRequest request) {
+    User user = new User();
+    user.setEmail(request.getEmail());
+    user.setPassword(request.getPassword());
     return userService.login(user);
   }
 }

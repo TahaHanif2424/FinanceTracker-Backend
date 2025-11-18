@@ -10,6 +10,7 @@ import com.FutureConnect.FutureConnect.UserGroupRelation.UserGroupRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,5 +75,38 @@ public class GroupService {
     }
 
     return savedGroup;
+  }
+
+  @Transactional
+  public void addMemberToGroup(String groupId, String userId) {
+    // Find the group
+    Groups group =
+        groupRepository
+            .findById(Integer.valueOf(groupId))
+            .orElseThrow(() -> new RuntimeException("Group not found with id: " + groupId));
+
+    // Find the user
+    User user =
+        userRepository
+            .findById(UUID.fromString(userId))
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+    // Check if user is already a member
+    boolean alreadyMember = userGroupRepository.findAll().stream()
+        .anyMatch(relation ->
+            relation.getGroup().getId() == group.getId() &&
+            relation.getUser().getId().equals(user.getId()));
+
+    if (alreadyMember) {
+      throw new IllegalStateException("User is already a member of this group");
+    }
+
+    // Create UserGroupRelation for the new member
+    UserGroupRelation memberRelation = new UserGroupRelation();
+    memberRelation.setUser(user);
+    memberRelation.setGroup(group);
+    memberRelation.setDebt(0);
+    memberRelation.setReceivable(0);
+    userGroupRepository.save(memberRelation);
   }
 }

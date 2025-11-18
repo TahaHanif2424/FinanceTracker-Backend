@@ -20,6 +20,12 @@ public class FriendService {
   public void sendRequest(FriendRequest friendRequest) {
     UUID myId = UUID.fromString(friendRequest.getMyId());
     UUID friendId = UUID.fromString(friendRequest.getFriendId());
+
+    // Check if trying to send request to self
+    if (myId.equals(friendId)) {
+      throw new IllegalArgumentException("Cannot send friend request to yourself");
+    }
+
     User myUser =
         userRepository.findById(myId).orElseThrow(() -> new RuntimeException("User not found"));
     User friend =
@@ -27,13 +33,8 @@ public class FriendService {
             .findById(friendId)
             .orElseThrow(() -> new RuntimeException("Friend not found"));
 
-    // Check if friendship already exists (in either direction)
-    boolean exists = friendRepository.findAll().stream()
-        .anyMatch(f ->
-            (f.getUser1().getId().equals(myId) && f.getUser2().getId().equals(friendId)) ||
-            (f.getUser1().getId().equals(friendId) && f.getUser2().getId().equals(myId)));
-
-    if (exists) {
+    // Check if friendship already exists (in either direction) using efficient query
+    if (friendRepository.existsByUsers(myId, friendId)) {
       throw new IllegalStateException("Friendship request already exists");
     }
 
@@ -82,14 +83,10 @@ public class FriendService {
     userRepository.findById(myId).orElseThrow(() -> new RuntimeException("User not found"));
     List<Friends> friendships = friendRepository.findByUserIdAndStatus(myId, FriendshipStatus.PENDING);
 
+    // Only return requests where current user is the receiver (user2)
     return friendships.stream()
-        .map(friendship -> {
-          if (friendship.getUser1().getId().equals(myId)) {
-            return friendship.getUser2();
-          } else {
-            return friendship.getUser1();
-          }
-        })
+        .filter(friendship -> friendship.getUser2().getId().equals(myId))
+        .map(friendship -> friendship.getUser1()) // Return the sender
         .toList();
   }
 
