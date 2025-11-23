@@ -1,12 +1,14 @@
 package com.FutureConnect.FutureConnect.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -23,8 +25,7 @@ public class User {
   private String name;
   private String email;
 
-  @JsonIgnore
-  private String password;
+  @JsonIgnore private String password;
 
   @Column(columnDefinition = "integer default 0")
   private Integer monthlyIncome = 0;
@@ -32,5 +33,7 @@ public class User {
   private boolean isVerified;
 
   @OneToMany(mappedBy = "user")
+  @ToString.Exclude
+  @JsonIgnoreProperties({"user", "group"})
   private List<UserGroupRelation> groupRelations;
 }

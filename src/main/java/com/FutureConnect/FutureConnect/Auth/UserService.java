@@ -52,5 +52,4 @@ public class UserService {
     }
     throw new RuntimeException("Invalid password");
   }
-
 }

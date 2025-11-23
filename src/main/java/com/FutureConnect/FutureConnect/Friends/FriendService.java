@@ -5,7 +5,6 @@ import com.FutureConnect.FutureConnect.Friends.DTO.FriendRequest;
 import com.FutureConnect.FutureConnect.Model.Friends;
 import com.FutureConnect.FutureConnect.Model.FriendshipStatus;
 import com.FutureConnect.FutureConnect.Model.User;
-
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,26 +61,29 @@ public class FriendService {
     friendRepository.save(friends);
   }
 
-  public List<User> getAllFriends(String userId){
+  public List<User> getAllFriends(String userId) {
     UUID myId = UUID.fromString(userId);
     userRepository.findById(myId).orElseThrow(() -> new RuntimeException("User not found"));
-    List<Friends> friendships = friendRepository.findByUserIdAndStatus(myId, FriendshipStatus.ACCEPTED);
+    List<Friends> friendships =
+        friendRepository.findByUserIdAndStatus(myId, FriendshipStatus.ACCEPTED);
 
     return friendships.stream()
-        .map(friendship -> {
-          if (friendship.getUser1().getId().equals(myId)) {
-            return friendship.getUser2();
-          } else {
-            return friendship.getUser1();
-          }
-        })
+        .map(
+            friendship -> {
+              if (friendship.getUser1().getId().equals(myId)) {
+                return friendship.getUser2();
+              } else {
+                return friendship.getUser1();
+              }
+            })
         .toList();
   }
 
-  public List<User> getPendingFriendRequests(String userId){
+  public List<User> getPendingFriendRequests(String userId) {
     UUID myId = UUID.fromString(userId);
     userRepository.findById(myId).orElseThrow(() -> new RuntimeException("User not found"));
-    List<Friends> friendships = friendRepository.findByUserIdAndStatus(myId, FriendshipStatus.PENDING);
+    List<Friends> friendships =
+        friendRepository.findByUserIdAndStatus(myId, FriendshipStatus.PENDING);
 
     // Only return requests where current user is the receiver (user2)
     return friendships.stream()
@@ -90,26 +92,29 @@ public class FriendService {
         .toList();
   }
 
-  public List<User> getNonFriendUsers(String userId){
+  public List<User> getNonFriendUsers(String userId) {
     UUID myId = UUID.fromString(userId);
     userRepository.findById(myId).orElseThrow(() -> new RuntimeException("User not found"));
 
     // Get ALL friendships (any status) for this user
-    List<Friends> allRelationships = friendRepository.findAll().stream()
-        .filter(friendship ->
-          friendship.getUser1().getId().equals(myId) ||
-          friendship.getUser2().getId().equals(myId))
-        .toList();
+    List<Friends> allRelationships =
+        friendRepository.findAll().stream()
+            .filter(
+                friendship ->
+                    friendship.getUser1().getId().equals(myId)
+                        || friendship.getUser2().getId().equals(myId))
+            .toList();
 
     // Collect all user IDs that have any entry in friends table with current user
     List<UUID> relatedUserIds = new java.util.ArrayList<>();
-    allRelationships.forEach(friendship -> {
-      if (friendship.getUser1().getId().equals(myId)) {
-        relatedUserIds.add(friendship.getUser2().getId());
-      } else {
-        relatedUserIds.add(friendship.getUser1().getId());
-      }
-    });
+    allRelationships.forEach(
+        friendship -> {
+          if (friendship.getUser1().getId().equals(myId)) {
+            relatedUserIds.add(friendship.getUser2().getId());
+          } else {
+            relatedUserIds.add(friendship.getUser1().getId());
+          }
+        });
 
     // Get all users and filter out current user and anyone with any relationship entry
     return userRepository.findAll().stream()
